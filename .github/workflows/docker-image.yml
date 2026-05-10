@@ -1,29 +1,19 @@
-name: Build and Push to DockerHub
+name: Docker Image CI
 
 on:
   push:
-    branches: [ "master" ]  # Trigger on push to main branch
+    branches: [ "master" ]
 
 jobs:
-  build-and-push:
+
+  build:
+
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out the code from the repo
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # 2. Log in to DockerHub using secrets
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-      # 3. Build and push the image
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/booster-app:latest
+    - uses: actions/checkout@v4
+    - name: Build the Docker image and push to docker_hub
+      run: |
+          docker build . --file Dockerfile -t jannawael/booster_app:latest
+          docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+          docker push jannawael/booster_app:latest
