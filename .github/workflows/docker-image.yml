@@ -14,6 +14,6 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image and push to docker_hub
       run: |
-          docker build . --file dockerfile -t jannawael/booster_app:latest
+          docker build . --file Dockerfile -t jannawael/booster_app:latest
           docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
           docker push jannawael/booster_app:latest
